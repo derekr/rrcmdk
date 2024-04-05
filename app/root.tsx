@@ -60,10 +60,10 @@ const indexRoute = createRoute({
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandGroup heading="Suggestions">
-            <CommandItem onSelect={() => cmdRouter.navigate({ to: '/home' })}>
+            <CommandItem onSelect={() => cmdRouter.navigate({ to: "home" })}>
               Home
             </CommandItem>
-            <CommandItem onSelect={() => cmdRouter.navigate({ to: '/about' })}>
+            <CommandItem onSelect={() => cmdRouter.navigate({ to: "about" })}>
               About
             </CommandItem>
           </CommandGroup>
@@ -73,8 +73,20 @@ const indexRoute = createRoute({
   },
 });
 
-const homeRoute = createRoute({
+const layoutRoute = createRoute({
   getParentRoute: () => rootRoute,
+  id: "layout",
+  component: function Layout() {
+    return (
+      <div>
+        Contextual layout <TanstackOutlet />
+      </div>
+    );
+  },
+});
+
+const homeRoute = createRoute({
+  getParentRoute: () => layoutRoute,
   path: "/home",
   component: function Home() {
     return (
@@ -88,7 +100,7 @@ const homeRoute = createRoute({
 });
 
 const aboutRoute = createRoute({
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => layoutRoute,
   path: "/about",
   component: function About() {
     return (
@@ -101,7 +113,10 @@ const aboutRoute = createRoute({
   },
 });
 
-const routeTree = rootRoute.addChildren([indexRoute, homeRoute, aboutRoute]);
+const routeTree = rootRoute.addChildren([
+  indexRoute,
+  layoutRoute.addChildren([homeRoute, aboutRoute]),
+]);
 
 const cmdRouter = createRouter({
   history: createMemoryHistory({ initialEntries: ["/"] }),
