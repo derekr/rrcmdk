@@ -6,7 +6,6 @@ export default defineConfig({
   base: "/example",
   plugins: [
     remix({
-      basename: "/example",
       ssr: false,
     }),
     tsconfigPaths(),
